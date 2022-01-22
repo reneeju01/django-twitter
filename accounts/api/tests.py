@@ -1,4 +1,4 @@
-from django.test import TestCase
+from testing.testcases import TestCase
 from rest_framework.test import APIClient
 from django.contrib.auth.models import User
 
@@ -14,17 +14,11 @@ class AccountApiTests(TestCase):
     def setUp(self):
         # This function will be executed before each test function executes
         self.client = APIClient()
-        self.user = self.createUser(
+        self.user = self.create_user(
             username = 'tester',
             email = 'tester@gmail.com',
             password = 'correct password',
         )
-
-    def createUser(self, username, email, password):
-        # Do not use User.objects.create()
-        # Since password needs to be encrypted, username 和 email need to be
-        # normalized
-        return User.objects.create_user(username, email, password)
 
     def test_login(self):
         # login need to use post method, not get
