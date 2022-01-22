@@ -26,7 +26,7 @@ SECRET_KEY = '7hjz31ji_1!ng&%2rrt*gkn9(!ps4@+hluht4s_2n14qlle95r'
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', '192.168.56.10', 'localhost']
-
+INTERNAL_IPS= ['10.0.2.2']
 
 # Application definition
 
@@ -39,9 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third party
     'rest_framework',
+    'debug_toolbar',
 
     # project apps
     'accounts',
+    'tweets',
 ]
 
 REST_FRAMEWORK = {
@@ -50,6 +52,7 @@ REST_FRAMEWORK = {
 }
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
