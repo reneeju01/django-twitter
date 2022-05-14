@@ -25,8 +25,7 @@ class FriendshipViewSet(viewsets.GenericViewSet):
     def followers(self, request, pk):
         # GET /api/friendships/1/followers/
         # pk=1,  get all follwers for user_id=1
-        friendships = Friendship.objects.filter(to_user_id=pk).order_by(
-            '-created_at')
+        friendships = Friendship.objects.filter(to_user_id=pk)
         serializer = FollowerSerializer(friendships, many=True)
         return Response(
             {'followers': serializer.data},
@@ -36,9 +35,8 @@ class FriendshipViewSet(viewsets.GenericViewSet):
     @action(methods=['GET'], detail=True, permission_classes=[AllowAny])
     def followings(self, request, pk):
         # GET /api/friendships/1/followings/
-        # pk=1,  get all follwings for user_id=1
-        friendships = Friendship.objects.filter(from_user_id=pk).order_by(
-            '-created_at')
+        # pk=1,  get all follwings for user_id=1 order_by reverse time
+        friendships = Friendship.objects.filter(from_user_id=pk)
         serializer = FollowingSerializer(friendships, many=True)
         return Response(
             {'followings': serializer.data},
@@ -53,6 +51,16 @@ class FriendshipViewSet(viewsets.GenericViewSet):
 
         # check if user with id=pk exists
         self.get_object()
+
+        # Silent on duplicated follow because there are many reasons for such
+        # repeated operations due to network delays, there is no need to
+        # treat them as errors
+        if Friendship.objects.filter(from_user=request.user,
+                                    to_user=pk).exists():
+            return Response({
+                'success': True,
+                'duplicate': True,
+            }, status=status.HTTP_201_CREATED)
 
         # POST /api/friendships/<pk>/follow/
         serializer = FriendshipSerializerForCreate(data={
