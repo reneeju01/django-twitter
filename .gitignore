@@ -136,3 +136,4 @@ dmypy.json
 
 # Pycharm autofile
 .idea/
+.pycharm_helpers/
