@@ -1,1 +1,1 @@
-# django-twitter 2022
+# django-twitter
