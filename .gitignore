@@ -137,3 +137,6 @@ dmypy.json
 # Pycharm autofile
 .idea/
 .pycharm_helpers/
+
+# Mac OS X
+.DS_Store
